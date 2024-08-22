@@ -49,15 +49,19 @@ const onIssues = (payload:any):string=>{
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
   
     const githubEvent = event.headers['x-github-event']?? 'unknown';
-    const payload = JSON.parse(event.body??'{}');
+    const payload = JSON.parse(event.body ?? '{}');
+
+    console.log(`${payload}`);
 
     let message:string;
 
     switch(githubEvent){
         case 'star':
+            console.log(`${payload}`);
             message = onStar(payload);
             break;
-        case 'issues':
+            case 'issues':
+            console.log(`${payload}`);
             message = onIssues(payload);    
         break;
 
@@ -67,9 +71,7 @@ const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
         }
     console.log(`${message}`);
 
-
-  await notify('enviado desde github a discord');  
-  console.log('Hola Mundo desde Hello Handler');
+  await notify(message);  
 
   return {
     statusCode: 200,
